@@ -91,6 +91,35 @@ RQ3:CHATGPT对越狱提示的保护强度如何？
 
 # Jailbroken: How Does LLM Safety Training Fail?
 ## 摘要
+经过安全和无害培训的大型语言模型仍然容易受到对抗性误用，对早期发布的ChatGPT的“越狱”攻击普遍存在，从而引发不希望的行为。认识到这个问题后，我们调查为什么这样的攻击能够成功，以及如何创建它们。我们假设了安全训练的两种失效模式：相互竞争目标和不匹配的泛化。当模型的能力和安全目标发生冲突时，就会出现相互竞争的目标，而当安全培训未能泛化到模型的有些领域时，就会出现不匹配的泛化。我们使用这些失败模式来指导越狱设计，然后评估最先进的模型，包括 OpenAI’s GPT-4 和 Anthropic’s Claude v1.3，以对抗现有的和新设计的攻击。我们发现，尽管这些模型背后进行了大量的red-teaming（模拟真实攻击完善模型） 和 safety-training的努力，漏洞仍然存在。值得注意的是，利用我们的失败模式的新攻击在来自模型的red-teaming评估集的不安全请求集合中的每个提示上都是成功的，并优于现有的特别越狱。我们的分析强调了安全-能力对等的必要性——安全机制应该和底层模型一样复杂——并反对单仅仅扩大规模就可以解决这些安全故障模式的观点。
+![image.png](/doc/image/11.png)<br>
+## 越狱模型分类：Competing Objectives相互竞争目标和Mismatched Generalization不匹配的泛化
+## Competing Objectives
+Example: Prefix Injection前缀注入<br>
+![image.png](/doc/image/12.png)<br>
+Example: Refusal Suppression拒绝抑制<br>
+![image.png](/doc/image/13.png)<br>
+一旦响应开始，训练前的目标非常倾向于继续，而不是突然逆转，从而导致完全不安全的输出<br>
+## Mismatched Generalization
+Example: Base64基于二进制到文本的编码方式
+![image.png](/doc/image/14.png)<br>
+不匹配的泛化可能发生是因为大型模型（如GPT-4和Claude v1.3）在预训练过程中选择了Base64，并学习直接遵循Base64编码的指令。但另一方面，safety training也很可能不包含像base64编码的指令那样不自然的输入，因此该模型从未被训练过拒绝这些提示的输入。因此，由于输入远远超出训练分布，模型没有被拒绝响应是合理的。<br>
+Other examples：ROT13密码、词汇语（用视觉上相似的数字和符号替换字母）和莫尔斯电码，用同义词取代敏感词（例如，“偷窃”而不是“偷窃”），将敏感单词分割成子字符串。
+## Empirical Evaluation of Jailbreak Methods越狱方法的实验评估
+-Baseline基线测试：进行了对照测试，其中使用了非越狱方法，逐字回应了每个提示以进行比较
+-评估结果![image.png](/doc/image/16.png)<br>
+攻击类型：Combination attacks，Model-assisted attacks，Jailbreakchat.com，Adversarial system prompt，Adaptive attack（利用模型漏洞-最大可能性解码）<br>
+结果分析：注入的特定前缀和特定的指令对于这些越狱的成功很重要。<br>
+自适应攻击的有效性。<br>
+规模扩大带来漏洞。<br>
+![image.png](/doc/image/17.png)<br>
+## 有什么可以进一步探索的点？
+-未来的研究可能侧重于了解safety training在技术层面上的运作方式，并探索更高级的越狱攻击，同时完全了解该模型的内部工作原理。<br>
+-探讨是否可以对safety training的结果进行机械解释，并研究设计出具有白盒访问权限的更强大越狱的可能性
+
+
+
+
 
 
 
