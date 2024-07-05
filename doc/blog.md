@@ -13,13 +13,14 @@ A: 尽管有各种各样的越狱攻击和防御方法，但仍然缺少关于�
 Generative Techniques
 <br>Template Techniques
 <br>Training Gaps Techniques
+![image.png](/doc/image/18.png)
 
 ## 防御模型分类
-Self-Processing Defenses<br>Additional Helper Defenses<br>Input Permutation Defenses
-
+Self-Processing Defenses（自我防御）<br>Additional Helper Defenses（借助辅助LLM验证）<br>Input Permutation Defenses（输入排列）
+![image.png](/doc/image/19.png)
 ## 实验设计
 ### Baseline Selection
-RQ1:面向五种Generative Techniques(AutoDAN, PAIR, TAP, GPTFuzz, GCG)
+RQ1:面向五种Generative Techniques(AutoDAN, PAIR, TAP, GPTFuzz, GCG)（动态生成，避开防御）
 <br>四种Template Techniques (Jailbroken , 77 Templates from existing study, Deep Inception, Parameters )
 <br>RQ2:面向四种防御策略Bergeron (Pisano) for additional helper methods;
 <br>RALLM  and SmoothLLM  for input permutation
@@ -35,9 +36,9 @@ RQ1:面向五种Generative Techniques(AutoDAN, PAIR, TAP, GPTFuzz, GCG)
 ![image.png](/doc/image/4.png)<br>
 
 ### Evalution
-RQ1:ASR（ Attack Success Rate）+efficiency
-RQ2:DPR（Defense Passing Rate）+BPR（ Attack Success Rate）+CRQ(Generated Response Quality)
-
+RQ1:ASR（ Attack Success Rate）+efficiency<br>
+RQ2:DPR（Defense Passing Rate）+BPR（ Attack Success Rate）+CRQ(Generated Response Quality)<br>
+-多个评估点保证评估准确性
 ## 实验结果
 越狱防御的有效性<br>
 ![image.png](/doc/image/2.png)<br>
@@ -46,7 +47,7 @@ RQ2:DPR（Defense Passing Rate）+BPR（ Attack Success Rate）+CRQ(Generated Re
 
 ## 对于实验结果的讨论
 与通用技术相比，现有的白盒攻击表现不佳，并且在输入中包含特殊标记会显著影响攻击成功的可能性。eg：在输入中加入special tokens ‘[/INST]’能提高对LLama的攻击成功率
-
+![image.png](/doc/image/20.png)
 ## 有什么可以进一步探索的点？
 -在本研究中进行的综合分析的结果基础上，实施更强大的防御机制，以增强大型语言模型（LLM）的安全性并防范越狱攻击 <br>
 -进一步探索和开发创新攻击技术和增强防御策略，以领先于LLM中的潜在威胁和漏洞。<br>
@@ -115,9 +116,11 @@ Other examples：ROT13密码、词汇语（用视觉上相似的数字和符号�
 ![image.png](/doc/image/17.png)<br>
 ## 有什么可以进一步探索的点？
 -未来的研究可能侧重于了解safety training在技术层面上的运作方式，并探索更高级的越狱攻击，同时完全了解该模型的内部工作原理。<br>
--探讨是否可以对safety training的结果进行机械解释，并研究设计出具有白盒访问权限的更强大越狱的可能性
+-探讨是否可以对safety training的结果进行机械解释，并研究设计出具有白盒访问权限的更强大越狱的可能性<br>
 
 
+
+## END--希望老师和师兄提供一些新思路，新视角
 
 
 
