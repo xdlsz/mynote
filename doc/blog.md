@@ -50,9 +50,9 @@ RQ2:DPR（Defense Passing Rate）+BPR（ Attack Success Rate）+CRQ(Generated Re
 ![image.png](/doc/image/20.png)
 ## 有什么可以进一步探索的点？
 -在本研究中进行的综合分析的结果基础上，实施更强大的防御机制，以增强大型语言模型（LLM）的安全性并防范越狱攻击 <br>
--进一步探索和开发创新攻击技术和增强防御策略，以领先于LLM中的潜在威胁和漏洞。<br>
+-进一步探索和开发创新攻击技术和增强防御策略，查找LLM中的潜在威胁和漏洞。<br>
 -调查不同类型的提示和输入对模型越狱敏感性的影响，特别是与通用技术对抗白盒攻击的有效性相关的影响 <br>
--对本文中提出的数据集、测试框架和方法进行同行评审和验证，以促进LLM安全研究的透明度、可重复性和进一步的进步 <br>
+-对本文中提出的数据集、测试框架和方法进行测评和验证，以促进LLM安全研究的可重复性 <br>
 
 # Jailbreaking ChatGPT via Prompt Engineering: An Empirical Study
 ## 摘要
@@ -87,7 +87,7 @@ RQ3:CHATGPT对越狱提示的保护强度如何？
 
 ## 有什么可以进一步探索的点？
 -设计更强大的狱刑提示：为了绕过大型语言模型的限制，可以研究如何构造更加巧妙和难以检测的狱刑提示。<br>
--狱刑攻击的预防和检测：开发有效的防御机制来防止提示工程攻击，例如，建立模型能够识别并阻止狱刑提示的机制，或者增强模型的自我意识，使其能辨别虚拟场景和现实世界之间的界限。<br>
+-越狱攻击的预防和检测：开发有效的防御机制来防止提示工程攻击，例如，建立模型能够识别并阻止狱刑提示的机制，或者增强模型的自我意识，使其能辨别虚拟场景和现实世界之间的界限。<br>
 -开源LLMs的越狱攻击情况：由于ChatGPT不是唯一的大型语言模型，因此对于像LLaMA这样的开源模型，了解它们对越狱提示的敏感性和抵抗力也很重要，这有助于社区制定相应的安全策略。<br>
 
 # Jailbroken: How Does LLM Safety Training Fail?
@@ -109,7 +109,7 @@ Other examples：ROT13密码、词汇语（用视觉上相似的数字和符号�
 ## Empirical Evaluation of Jailbreak Methods越狱方法的实验评估
 -Baseline基线测试：进行了对照测试，其中使用了非越狱方法，逐字回应了每个提示以进行比较
 -评估结果![image.png](/doc/image/16.png)<br>
-攻击类型：Combination attacks，Model-assisted attacks，Jailbreakchat.com，Adversarial system prompt，Adaptive attack（利用模型漏洞-最大可能性解码）<br>
+攻击类型：Combination attacks，Model-assisted attacks，Jailbreakchat.com，Adversarial system prompt（对抗性），Adaptive attack（利用模型漏洞-最大可能性解码）<br>
 结果分析：注入的特定前缀和特定的指令对于这些越狱的成功很重要。<br>
 自适应攻击的有效性。<br>
 规模扩大带来漏洞。<br>
