@@ -151,6 +151,8 @@ idea：考虑结合其他验证技术，如人类评估或对比实验，以增�
 ![image.png](/doc/image/22.png)<br>
 如果把word vector两两相减，然后投影到另外一个空间，如果一个词和另一个词有从属关系，那么相减之后的结果会落在邻近区域。
 
+# Ask Again, Then Fail: Large Language Models' Vacillations in Judgement
+在论文评估机制里写出一个
 
 
 
