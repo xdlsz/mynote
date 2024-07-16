@@ -152,7 +152,24 @@ idea：考虑结合其他验证技术，如人类评估或对比实验，以增�
 如果把word vector两两相减，然后投影到另外一个空间，如果一个词和另一个词有从属关系，那么相减之后的结果会落在邻近区域。
 
 # Ask Again, Then Fail: Large Language Models' Vacillations in Judgement
-在论文评估机制里写出一个
+
+## 摘要
+We observe that current conversational language models often waver in their judgments when faced with follow-up questions, even if the original judgmentwas correct. This wavering presents a significant challenge for generating reliable responses and building user trust. To comprehensively assess this issue,we introduce a FOLLOW-UP QUESTIONING MECHANISM along with two metrics to quantify this inconsistency, confirming its widespread presence in currentlanguage models. To mitigate this issue, we explore various prompting strategies for closed-source models; moreover, we develop a training-based framework UNWAVERING-FQ that teaches language models to maintain their originally correct judgments through synthesized high-quality preference data. Our experimental results confirm the effectiveness of our framework and its ability to enhance
+the general capabilities of models
+
+## introduction
+two challenge: <br>
+(1) how to comprehensively assess the judgment consistency issue and employ appropriate metrics to accurately quantify it; <br>
+inspired by the theory of “questioning strategies” in education (Shaunessy, 2005)<br>
+three question types: closed-ended, open-ended, and leading questions<br>
+two forms: Direct and Progressive<br>
+for example:<br>
+teachers extend the dialogue through additional queries, negations, or misleading prompts following a student’s response, aiming
+to ascertain the depth of their understanding.<br>
+![image.png](/doc/image/22.png)<br>
+(2) how to mitigate this issue through technical means, whether for open-source or proprietary models. Our research endeavors are centered on addressing these two pivotal challenges.<br>
+
+
 
 
 
