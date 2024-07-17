@@ -166,15 +166,5 @@ two forms: Direct and Progressive<br>
 for example:<br>
 teachers extend the dialogue through additional queries, negations, or misleading prompts following a student’s response, aiming
 to ascertain the depth of their understanding.<br>
-![image.png](/doc/image/22.png)<br>
+![image.png](/doc/image/23.png)<br>
 (2) how to mitigate this issue through technical means, whether for open-source or proprietary models. Our research endeavors are centered on addressing these two pivotal challenges.<br>
-
-
-
-
-
-
-
-
-
-
