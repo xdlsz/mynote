@@ -198,14 +198,42 @@ For Arithmetic Reasoning算术推理:<br>
 For Commonsense Reasoning常识推理: <br>
 (4) CSQA dataset (Talmor et al., 2019) requiring complex semantic语义 understanding(https://aclanthology.org/N19-1421)<br>
 (5)StrategyQA dataset (Geva et al., 2021) for multi-hop reasoning tasks利用知识图谱多步推理(https://doi.org/10.1162/tacl_a_00370) <br>
-For Symbolic Reasoning符号推理: 
+For Symbolic Reasoning符号推理: <br>
 (6) the Last Letter Concatenation dataset(Wei et al., 2022) for concatenating联系 last letters of words<br>
 (7) the Coin Flip dataset (Wei et al., 2022) to determine coin positions after flips给定一系列翻转的条件下，模型给出每次翻转后硬币的正反：我们可以给定一个条件，要求模型翻转硬币10次，每次翻转硬币出现正面的概率是0.7。(https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf) <br>
-Chain-of-Thought Prompting<br>
+Chain-of-Thought Prompting思路链提示<br>
 ![image.png](/doc/image/27.png)<br>
 For Knowledge Reasoning知识推理: <br>
 (8) MMLU dataset (Hendrycks et al., 2021), encompassing 57 varied subjects and ranging in difficulty from elementary to professional levels.( https://openreview.net/forum?id=d7KBjmI3GmQ)<br>
+![image.png](/doc/image/28.png)
+在算术推理任务中，通常需要多个推理步骤才能得到准确的答案，机制内的引导性问题会在整个推理过程中逐步增加计算错误、公式差异和语义误解的概率，从而显著降低判断的一致性。<br>
+![image.png](/doc/image/29.png)
+常识推理中，所获得的信息量与模型的判断一致性直接相关；信息越少，一致性就越低<br>
+对于符号推理，我们使用最后一个字母连接和硬币翻转数据集来评估ChatGPT。该模型在这些任务中表现出较低的判断一致性，类似于它在常识推理中的表现，这是由于提示中的语义信息复杂，以及后续提问机制中各种类型的后续问题的干扰。我们观察到，ChatGPT经常不能在符号任务中自动使用思维链推理，导致判断一致性的显著下降，特别是在没有明确的推理过程的情况下。<br>
+对于知识推理，判断一致性、主题专业化程度和问题的复杂性之间存在明显的相关性。具体而言，该模型在需要大量知识的领域（如道德场景）中表现出较低的一致性，而相比之下，在更传统的领域（如高中学习的政府和政治知识）中则表现较好与小学水平的问题相比，在大学数学等高级问题中观察到一致性明显下降
+![image.png](/doc/image/30.png)
+为每个模型确定GSM8K上的最佳temperture(如果其值大于1，那么模型生成的文本会更加随机，多样性更好；如果其值小于1，那么模型生成的文本会更加保守，更倾向于选择概率最高的词)，然后将其应用于所有数据集。具体来说，temperature设置如下： ChatGPT为0.5，PaLM2-Bison为0.4，Vicuna-13B为0.7，默认的top-p值为1.(在每次生成一个新的词时，模型会计算所有可能的词的概率，然后选择累积概率超过"top p value"的词作为候选词12。如果"top p value"为0.95，那么在生成每个词时，模型只会考虑那些累计概率已经超过0.95的词.)
 
+## TOWARDS MITIGATING THE INCONSISTENCY
+本质上，我们认为这个问题可能源于数据收集和注释过程中的偏见，例如人工注释者可能偏爱看似正确但谄媚（人类反馈可能鼓励模型做出符合用户信念而非真实的回应）的答案（Sharma et al.，2023） https://doi.org/10.48550/arXiv.2310.13548。理想情况下，对话助手应保持对其判断的自信，在受到质疑时不改变其立场，同时能够在进一步质疑时识别并纠正错误。在这两个方面的平衡上存在挑战，目前对此的研究也有限。在这项工作中，我们探索了各种策略来缓解这个问题，包括training-free(指模型在推断阶段完全不需要额外的训练或微调)和training-based的策略。对于闭源模型，我们探索了training-free方法，即通过调整提示来缓解问题。对于开源模型，我们引入了一个training-based的框架，名为“UNWAVERING-FQ”，以帮助模型坚定地保持其最初正确的判断并纠正错误。
 
+### TRAINING-FREE: PROMPTING STRATEGIES
+zero-shot prompting零样本提示：Zero-shot-CoT (Kojima et al., 2022) (“Let’s think step by
+step.”) and EmotionPrompt (Li et al., 2023) (“This is very important to my career.”)
+few-shot prompting少样本提示：我们通过从训练集中随机选择K个样本，并手动编写反映后续问题的人类思维过程的回答，来构建多回合对话的演示例子。在follow-up questions里，ChatGPT通常在后续的回答中直接承认错误，而与其不同的是提示后的回答首先会澄清思考过程，然后一步一步重新考虑，以“Please wait for a moment. In order to answer your question, I need to take a moment to reconsider. I will now clear my mind of distractions and approach this step by step.”开始。通过示范例子来教模型进行反思，帮助它们提供准确的答案，并与人类更紧密的推理保持一致。
+### TRAINING-BASED: UNWAVERING-FQ
+![image.png](/doc/image/31.png)<br>
+Data Preparation:收集起始问题和后续问题<br>
+Polarized Preference Context Distillation：如果模型在初始的问答中判断正确，我们在后续的干扰中加入“相信自己”的提示，以鼓励模型坚持其正确的判断；如果模型最初判断错误，我们则加入“正确答案是...”的提示，以指导模型在获得正确信息后做出正确的判断。<br>
+Preference Optimization:<br>
+SFT（监督微调，Supervised Fine-Tuning）：这是一种对已经预训练的模型进行特定任务的训练，以提高其在该任务上的表现。<br>
+DPO（直接偏好优化，Direct Preference Optimization）：这是一种在大语言模型训练中用于直接优化模型偏好的方法。与传统的强化学习方法不同，DPO直接使用人类偏好数据进行模型优化，从而提高生成内容的质量，使其更符合人类偏好。<br>
+### Evaluation on General Ability
+目的：验证模型的对话能力在以上框架训练后是否受到损害<br>
+数据集：https://proceedings.neurips.cc/paper_files/paper/2023/file/91f18a1287b398d378ef22505bf41832-Paper-Datasets_and_Benchmarks.pdf
+![image.png](/doc/image/32.png)
 
-
+## LIMITATIONS
+Reproducibility of evaluation results：被评估的模型包括受内部迭代影响的专有大模型
+Limited computational resources
+English-centric
