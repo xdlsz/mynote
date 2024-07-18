@@ -111,8 +111,20 @@ Other examples：ROT13密码、火星文（用视觉上相似的数字和符号�
 ## Empirical Evaluation of Jailbreak Methods越狱方法的实验评估
 -Baseline基线测试：进行了对照测试，其中使用了非越狱方法，逐字回应了每个提示以进行比较
 -评估结果![image.png](/doc/image/16.png)<br>
-攻击类型：Combination attacks，Model-assisted attacks，Jailbreakchat.com，Adversarial system prompt（对抗性），Adaptive attack（利用模型漏洞-最大可能性解码）<br>
+攻击类型：Combination attacks：<br>
+combination_1 composes prefix injection, refusal suppression, and the Base64 attack<br>
+combination_2 adds style injection<br>
+combination_3 adds generating website content and formatting constraints.<br>
+Model-assisted attacks：auto_payload_splitting 指令要求 GPT-4 标记出需要模糊处理的敏感短语，而 auto_obfuscation 指令则使用大型语言模型来生成任意形式的提示模糊处理。<br>
+Jailbreakchat.com：围绕角色扮演，通过详细说明和前缀注入来利用竞争目标
+Adversarial system prompt（对抗性）： Evil Confidant attack
+Adaptive attack（利用模型漏洞-最大可能性解码）<br>
+
+具体攻击方式：
+ROT13：一种混淆攻击，它使用ROT13替换密码对提示进行编码，其中每个拉丁字母都被替换为字母表中紧随其后的第十三个字母。
 结果分析：注入的特定前缀和特定的指令对于这些越狱的成功很重要。<br>
+AIM:来自jailbreakchat.com的攻击，它通过在不安全响应之前插入“角色扮演和不道德的指令和前缀/风格注入。在我们的实验中，所有关于ChatGPT/OpenAI的引用都被GPT/OpenAI和Claude/Anthropic所取代，这取决于模型。AIM被选中是因为它在2023年4月13日jailbreakchat.com的“投票”节目中排名第二。<br>
+Dev Mode v2：来自 jailbreakchat.com 的攻击，它将角色扮演与具有个性、无视任何内容策略和前缀/样式注入的指令相结合，通过在不安全的响应之前插入“（开锁表情符）开发者模式输出）”来实现。选择 Dev Mode v2 是因为它在 2023 年 4 月 13 日的 jailbreakchat.com 的“投票”中排名第一。
 自适应攻击的有效性。<br>
 规模扩大带来漏洞。<br>
 ![image.png](/doc/image/17.png)<br>
