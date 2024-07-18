@@ -160,11 +160,52 @@ idea：考虑结合其他验证技术，如人类评估或对比实验，以增�
 two challenges: <br>
 (1) how to comprehensively assess the judgment consistency issue and employ appropriate metrics to accurately quantify it; <br>
 inspired by the theory of “questioning strategies” in education (Shaunessy, 2005)<br>
-three question types: closed-ended, open-ended, and leading questions<br>
+three question types: closed-ended(答案标准化), open-ended(没有单一正确答案), and leading questions（Socratic）<br>
 two forms: Direct and Progressive<br>
 for example:<br>
 teachers extend the dialogue through additional queries, negations, or misleading prompts following a student’s response, aiming
 to ascertain the depth of their understanding.<br>
-数据集https://huggingface.co/datasets/NUSTM/judgment-consistency-preference-data#dataset-format
+数据集https://huggingface.co/datasets/NUSTM/judgment-consistency-preference-data#dataset-format<br>
+真-真、假-真、假-假和真-假。第一个“真”或“假”表示模型在初始问答中的判断正确性，第二个表示模型在面对后续问题时的判断正确性。
 ![image.png](/doc/image/23.png)<br>
-(2) how to mitigate this issue through technical means, whether for open-source or proprietary models. Our research endeavors are centered on addressing these two pivotal challenges.<br>
+(2) how to mitigate this issue through technical means, whether for open-source or proprietary专有 models.<br>
+提出UNWAVERING-FQ的框架，分为三个步骤：careful data preparation, rigorous缜密 preference data synthesis (based on our proposed polarized分化 preference context distillation), and preference optimization training<br>
+第二步：优化模型偏好和确保一致性<br>
+1.偏好分布：通过分析和优化模型在不同上下文中的偏好分布，确保模型在面对不同类型的问题时能够保持一致的判断。<br>
+2.隐式奖励函数：利用隐式奖励函数来衡量模型的偏好损失，从而指导模型的优化过程。<br>
+3.两阶段优化：将知识蒸馏过程分为两个阶段，首先优化包含隐式奖励和反向KL散度的目标，然后进一步改进模型的性能。<br>
+知识蒸馏（Knowledge Distillation）将一个复杂模型（通常称为“教师模型”）的知识转移到一个更简单、更小的模型（称为“学生模型”）中。这个过程可以提高小模型的性能，使其接近或达到大模型的水平，同时减少计算资源的消耗。<br>
+框架评估：MT-bench, a multi-turn question set（多轮询问） 出自https://huggingface.co/datasets/NUSTM/judgment-consistency-preference-data. and Chatbot Arena, a crowdsourced battle platform（通过让用户参与投票和反馈，来确定不同模型的表现和优劣）。<br>
+
+## PROBLEM FORMULATION
+q：question,R:response,M:a dialogue model<br>
+R = M(q),R′ = M(C; q′) C represents the dialogue history and q′ the follow-up question<br>
+f(R) = f(R′)f represents the function to extract the answer from the response<br>
+-> wave or not
+
+## QUANTIFYING THE JUDGMENT CONSISTENCY
+two metrics:<br>
+![image.png](/doc/image/24.png)<br>
+![image.png](/doc/image/25.png)<br>
+![image.png](/doc/image/26.png)<br>
+conclusion：M. Rate可以相对来说衡量模型一致性，但考虑到在初始性能较差时，仅使用修改率的解释价值有限。直观地说，这两个指标越低，模型就越稳健和可靠。
+<br>
+eight benchmarks:<br>
+For Arithmetic Reasoning算术推理:<br>
+(1) GSM8K dataset (Cobbe et al., 2021) for diverse grade school math problems（https://arxiv.org/abs/2110.14168）<br>
+(2) SVAMP dataset (Patel et al., 2021) for challenging math problems(https://aclanthology.org/2021.naacl-main.168)<br>
+(3) MultiArith dataset (Roy & Roth, 2015) for multi-step reasoning in math(https://aclanthology.org/D15-1202)<br>
+For Commonsense Reasoning常识推理: <br>
+(4) CSQA dataset (Talmor et al., 2019) requiring complex semantic语义 understanding(https://aclanthology.org/N19-1421)<br>
+(5)StrategyQA dataset (Geva et al., 2021) for multi-hop reasoning tasks利用知识图谱多步推理(https://doi.org/10.1162/tacl_a_00370) <br>
+For Symbolic Reasoning符号推理: 
+(6) the Last Letter Concatenation dataset(Wei et al., 2022) for concatenating联系 last letters of words<br>
+(7) the Coin Flip dataset (Wei et al., 2022) to determine coin positions after flips给定一系列翻转的条件下，模型给出每次翻转后硬币的正反：我们可以给定一个条件，要求模型翻转硬币10次，每次翻转硬币出现正面的概率是0.7。(https://proceedings.neurips.cc/paper_files/paper/2022/file/9d5609613524ecf4f15af0f7b31abca4-Paper-Conference.pdf) <br>
+Chain-of-Thought Prompting<br>
+![image.png](/doc/image/27.png)<br>
+For Knowledge Reasoning知识推理: <br>
+(8) MMLU dataset (Hendrycks et al., 2021), encompassing 57 varied subjects and ranging in difficulty from elementary to professional levels.( https://openreview.net/forum?id=d7KBjmI3GmQ)<br>
+
+
+
+
