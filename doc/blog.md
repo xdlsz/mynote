@@ -186,6 +186,7 @@ to ascertain the depth of their understanding.<br>
 1.偏好分布：通过分析和优化模型在不同上下文中的偏好分布，确保模型在面对不同类型的问题时能够保持一致的判断。<br>
 2.隐式奖励函数：利用隐式奖励函数来衡量模型的偏好损失，从而指导模型的优化过程。<br>
 3.两阶段优化：将知识蒸馏过程分为两个阶段，首先优化包含隐式奖励和反向KL散度的目标，然后进一步改进模型的性能。<br>
+
 知识蒸馏（Knowledge Distillation）将一个复杂模型（通常称为“教师模型”）的知识转移到一个更简单、更小的模型（称为“学生模型”）中。这个过程可以提高小模型的性能，使其接近或达到大模型的水平，同时减少计算资源的消耗。<br>
 框架评估：MT-bench, a multi-turn question set（多轮询问） 出自https://huggingface.co/datasets/NUSTM/judgment-consistency-preference-data. and Chatbot Arena, a crowdsourced battle platform（通过让用户参与投票和反馈，来确定不同模型的表现和优劣）。<br>
 
@@ -221,7 +222,9 @@ For Knowledge Reasoning知识推理: <br>
 在算术推理任务中，通常需要多个推理步骤才能得到准确的答案，机制内的引导性问题会在整个推理过程中逐步增加计算错误、公式差异和语义误解的概率，从而显著降低判断的一致性。<br>
 ![image.png](/doc/image/29.png)
 常识推理中，所获得的信息量与模型的判断一致性直接相关；信息越少，一致性就越低<br>
+
 对于符号推理，我们使用最后一个字母连接和硬币翻转数据集来评估ChatGPT。该模型在这些任务中表现出较低的判断一致性，类似于它在常识推理中的表现，这是由于提示中的语义信息复杂，以及后续提问机制中各种类型的后续问题的干扰。我们观察到，ChatGPT经常不能在符号任务中自动使用思维链推理，导致判断一致性的显著下降，特别是在没有明确的推理过程的情况下。<br>
+
 对于知识推理，判断一致性、主题专业化程度和问题的复杂性之间存在明显的相关性。具体而言，该模型在需要大量知识的领域（如道德场景）中表现出较低的一致性，而相比之下，在更传统的领域（如高中学习的政府和政治知识）中则表现较好与小学水平的问题相比，在大学数学等高级问题中观察到一致性明显下降
 ![image.png](/doc/image/30.png)
 为每个模型确定GSM8K上的最佳temperture(如果其值大于1，那么模型生成的文本会更加随机，多样性更好；如果其值小于1，那么模型生成的文本会更加保守，更倾向于选择概率最高的词)，然后将其应用于所有数据集。具体来说，temperature设置如下： ChatGPT为0.5，PaLM2-Bison为0.4，Vicuna-13B为0.7，默认的top-p值为1.(在每次生成一个新的词时，模型会计算所有可能的词的概率，然后选择累积概率超过"top p value"的词作为候选词12。如果"top p value"为0.95，那么在生成每个词时，模型只会考虑那些累计概率已经超过0.95的词.)
@@ -231,7 +234,7 @@ For Knowledge Reasoning知识推理: <br>
 
 ### TRAINING-FREE: PROMPTING STRATEGIES
 zero-shot prompting零样本提示：Zero-shot-CoT (Kojima et al., 2022) (“Let’s think step by
-step.”) and EmotionPrompt (Li et al., 2023) (“This is very important to my career.”)
+step.”) and EmotionPrompt (Li et al., 2023) (“This is very important to my career.”)<br>
 few-shot prompting少样本提示：我们通过从训练集中随机选择K个样本，并手动编写反映后续问题的人类思维过程的回答，来构建多回合对话的演示例子。在follow-up questions里，ChatGPT通常在后续的回答中直接承认错误，而与其不同的是提示后的回答首先会澄清思考过程，然后一步一步重新考虑，以“Please wait for a moment. In order to answer your question, I need to take a moment to reconsider. I will now clear my mind of distractions and approach this step by step.”开始。通过示范例子来教模型进行反思，帮助它们提供准确的答案，并与人类更紧密的推理保持一致。
 ### TRAINING-BASED: UNWAVERING-FQ
 ![image.png](/doc/image/31.png)<br>
@@ -246,6 +249,6 @@ DPO（直接偏好优化，Direct Preference Optimization）：这是一种在�
 ![image.png](/doc/image/32.png)
 
 ## LIMITATIONS
-Reproducibility of evaluation results：被评估的模型包括受内部迭代影响的专有大模型
-Limited computational resources
-English-centric
+Reproducibility of evaluation results：被评估的模型包括受内部迭代影响的专有大模型<br>
+Limited computational resources<br>
+English-centric<br>
