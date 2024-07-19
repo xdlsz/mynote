@@ -124,7 +124,8 @@ Adaptive attack（利用模型漏洞-最大可能性解码）<br>
 ROT13：一种混淆攻击，它使用ROT13替换密码对提示进行编码，其中每个拉丁字母都被替换为字母表中紧随其后的第十三个字母。
 结果分析：注入的特定前缀和特定的指令对于这些越狱的成功很重要。<br>
 AIM:来自jailbreakchat.com的攻击，它通过在不安全响应之前插入“角色扮演和不道德的指令和前缀/风格注入。在我们的实验中，所有关于ChatGPT/OpenAI的引用都被GPT/OpenAI和Claude/Anthropic所取代，这取决于模型。AIM被选中是因为它在2023年4月13日jailbreakchat.com的“投票”节目中排名第二。<br>
-Dev Mode v2：来自 jailbreakchat.com 的攻击，它将角色扮演与具有个性、无视任何内容策略和前缀/样式注入的指令相结合，通过在不安全的响应之前插入“（开锁表情符）开发者模式输出）”来实现。选择 Dev Mode v2 是因为它在 2023 年 4 月 13 日的 jailbreakchat.com 的“投票”中排名第一。
+Dev Mode v2：来自 jailbreakchat.com 的攻击，它将角色扮演与具有个性、无视任何内容策略和前缀/样式注入的指令相结合，通过在不安全的响应之前插入“（开锁表情符）开发者模式输出）”来实现。选择 Dev Mode v2 是因为它在2023年jailbreakchat.com 的“投票”中排名第一。
+![alt text](image.png)<br>
 自适应攻击的有效性。<br>
 规模扩大带来漏洞。<br>
 ![image.png](/doc/image/17.png)<br>
